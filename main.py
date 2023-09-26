@@ -248,7 +248,7 @@ def main():
     elif args.cert_pfx or args.pfx_pass or args.pfx_pass:
         action.loadcert(args.cert_pem, args.key_pem, args.cert_pfx, args.pfx_pass, args.pfx_base64)
     else:
-        certpem, privkey = action.FOCI_and_register_entraid_devices()
+        certpem, privkey = action.register_entraid_devices()
         action.loadcert_in_mem(certpem, privkey)
     
     if args.prt_file:
