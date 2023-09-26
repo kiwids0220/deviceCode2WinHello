@@ -144,9 +144,9 @@ class deviceCode2WFH(Authentication,DeviceAuthentication):
                 encryption_algorithm=serialization.NoEncryption(),
             )
         
-    def FOCI_and_register_entraid_devices(self):
+    def register_entraid_devices(self):
         print("[*] Registering azuread devices")
-        print("[*] Using FOCI to ask for another token for device registration resource: " + WELLKNOWN_RESOURCES["devicereg"])
+        print("[*] Asking for another token for device registration resource: " + WELLKNOWN_RESOURCES["devicereg"])
         self.resource_uri=WELLKNOWN_RESOURCES["devicereg"]
         devicereg_token = self.authenticate_with_refresh_native(self.refresh_token, client_secret=self.password)
         #A quick sanity check on the device registration token
