@@ -213,7 +213,7 @@ def main():
 
     # WFB registration flag
     parser.add_argument('-u', '--username', action='store', metavar='USER', help='User to authenticate')
-    parser.add_argument('--wfb', '-w', action=argparse.BooleanOptionalAction, help='Attempt to register a windows hello for business key with the PRT')
+    parser.add_argument('--wfb', '-w', action='store_true', help='Attempt to register a windows hello for business key with the PRT')
     parser.add_argument('-d', '--driver-path',
                                 action='store',
                                 help='Path to geckodriver file on disk (download from: https://github.com/mozilla/geckodriver/releases)')
