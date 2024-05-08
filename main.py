@@ -28,7 +28,8 @@ class deviceCode2WFH(Authentication,DeviceAuthentication):
     Automation
     """
     def __init__(self, username=None, password=None, tenant=None, client_id=WELLKNOWN_CLIENTS["broker"]):
-        super().__init__(username, password, tenant, client_id)
+        Authentication.__init__(self, username, password, tenant, client_id)
+        DeviceAuthentication.__init__(self, auth=self)
 
     ### Hard-coding the clientID because this is the only client can request PRT with its refresh token...
     def device_code_wrapper(self):
