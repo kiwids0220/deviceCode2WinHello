@@ -6,6 +6,7 @@ import random
 import string
 import requests
 import codecs
+import time
 import json
 from urllib.parse import quote_plus 
 from cryptography.hazmat.primitives import serialization, padding, hashes
@@ -17,7 +18,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography import x509
 from cryptography.x509.oid import NameOID
 from cryptography.utils import CryptographyDeprecationWarning
-from roadtools.roadlib.auth import Authentication, get_data, WELLKNOWN_CLIENTS, WELLKNOWN_RESOURCES
+from roadtools.roadlib.auth import Authentication, WELLKNOWN_CLIENTS, WELLKNOWN_RESOURCES
 from roadtools.roadtx.selenium import SeleniumAuthentication
 from roadtools.roadlib.deviceauth import DeviceAuthentication
 
@@ -182,7 +183,7 @@ class deviceCode2WFH(Authentication,DeviceAuthentication):
         replyurl = "ms-appx-web://Microsoft.AAD.BrokerPlugin/dd762716-544d-4aeb-a526-687b73838a22"
         url = f'https://login.microsoftonline.com/common/oauth2/authorize?response_type=code&client_id=dd762716-544d-4aeb-a526-687b73838a22&redirect_uri=ms-appx-web%3a%2f%2fMicrosoft.AAD.BrokerPlugin%2fdd762716-544d-4aeb-a526-687b73838a22&resource=urn%3ams-drs%3aenterpriseregistration.windows.net&add_account=noheadsup&scope=openid{hint}&response_mode=form_post&windows_api_version=2.0&amr_values=ngcmfa'
         selauth = SeleniumAuthentication(self, self, replyurl, proxy=proxy)
-        selauth.headless=True
+        selauth.headless=False
         service = selauth.get_service(driver_path)
         selauth.driver = selauth.get_webdriver(service, intercept=True)
         tokenreply = selauth.selenium_enrich_prt(url)
@@ -251,16 +252,12 @@ def main():
     else:
         certpem, privkey = action.register_entraid_devices()
         action.loadcert_in_mem(certpem, privkey)
-    
-    if args.prt_file:
-        action.loadprt(args.prt_file)
-    else:
-        prtdata = action.refreshtoken_to_prt_wrapper(token)
-        if prtdata:
-            print("[✔] Congratulations! You got a new PRT!")
-            action.saveprt(prtdata, prtfile="roadtx.prt")
-            action.setprt(prtdata["refresh_token"], prtdata['session_key'])
-
+  
+    prtdata = action.refreshtoken_to_prt_wrapper(token)
+    if prtdata:
+        print("[✔] Congratulations! You got a new PRT!")
+        action.saveprt(prtdata, prtfile="roadtx.prt")
+        action.setprt(prtdata["refresh_token"], prtdata['session_key'])
     if args.wfb:
         if not args.username:
             print("You will need to supply the username")
